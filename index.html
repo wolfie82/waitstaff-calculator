@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html ng-app="waiterEarningsCalculator">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Waiter Earnings Calculator</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body>
+
+    <div ng-controller="CalculatorCtrl" class="container">
+        <div class="text-center">
+            <h1>Waitstaff Calculator</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Enter the Meal Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form ng-submit="submit()" name="mealDetail" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-4 control-label">Base Meal Price</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            <input ng-model="meal.price" type="number" class="form-control" placeholder="0.00" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-4 control-label">Tax Rate</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">%</div>
+                                            <input ng-model="meal.taxPercentage" type="number" class="form-control" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-4 control-label">Tip Percentage</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">%</div>
+                                            <input ng-model="meal.tipPercentage" type="number" class="form-control" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-offset-4">
+                                        <div class="col-sm-3">
+                                            <button type="submit" class="btn btn-default">Submit</button>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <a class="btn btn-default" ng-click="cancel()">Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Customer Charges</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-horizontal form-group">
+                                <div class="row">
+                                    <label class="col-sm-3 control-label">Subtotal</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static">{{ customer.subtotal | currency:"$" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal form-group">
+                                <div class="row">
+                                    <label class="col-sm-3 control-label">Tip</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static">{{ customer.tip | currency:"$" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="form-horizontal form-group">
+                                <div class="row">
+                                    <label class="col-sm-3 control-label">Total</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static">{{ customer.total | currency:"$" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">My Earnings Info</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-horizontal form-group">
+                                <div class="row">
+                                    <label class="col-sm-3 control-label">Tip Total</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static">{{ earnings.tipTotal | currency:"$" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal form-group">
+                                <div class="row">
+                                    <label class="col-sm-3 control-label">Meal Count</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static">{{ earnings.mealCount }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal form-group">
+                                <div class="row">
+                                    <label class="col-sm-3 control-label">Average Tip</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static">{{ earnings.averageTip | currency:"$" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-6">
+                <div class="text-right">
+                    <a class="btn btn-default" ng-click="reset()">Reset</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

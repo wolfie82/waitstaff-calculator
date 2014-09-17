@@ -1,0 +1,11 @@
+.panel-body hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 2px;
+    border-top: 1px solid black;
+}
+
+.panel-body .row {
+    margin-left: 0;
+    margin-right: 0;
+}
